@@ -12,4 +12,5 @@ push
 sanctum
 migraciok es modellek (users, event, registration)
 xampp inditas, migralas
-factory-k letrehozasa
+factory-k letrehozasa (user, event, registration)
+seeder-k letrehozasa (user, event, registration)
