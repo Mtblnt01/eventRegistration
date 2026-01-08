@@ -26,7 +26,7 @@ class RegistrationSeeder extends Seeder
             ],
             [
                 'user_id' => $users[1]->id,
-                'event_id' => $events[0]->id,
+                'event_id' => $events[1]->id,
                 'status' => 'függőben',
                 'registered_at' => now()->subDays(3),
             ],

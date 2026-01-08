@@ -14,3 +14,6 @@ migraciok es modellek (users, event, registration)
 xampp inditas, migralas
 factory-k letrehozasa (user, event, registration)
 seeder-k letrehozasa (user, event, registration)
+
+adatbazis feltoltese
+API utvonalak beallitasa
