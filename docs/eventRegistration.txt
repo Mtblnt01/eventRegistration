@@ -11,3 +11,5 @@ push
 .env
 sanctum
 migraciok es modellek (users, event, registration)
+xampp inditas, migralas
+factory-k letrehozasa
