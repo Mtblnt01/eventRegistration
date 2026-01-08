@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Event extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'title',
+        'date',
+        'location',
+        'description',
+        'max_attendees'
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'date' => 'datetime',
+        ];
+    }
+
+    public function registrations(){
+        return $this->hasMany(Registration::class);
+    }
+
+    public function events(){
+        return $this->belongsToMany(Event::class, 'registrations')
+            ->withPivot('status', 'registered_at')
+            ->withTimestamps();
+    }
+}
