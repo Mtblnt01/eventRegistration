@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Str;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthController extends Controller
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|unique:users',
-                'password' => 'required|string|min:6',
+                'password' => 'required|string|confirmed|min:6',
                 'phone' => 'nullable|string|max:20',
             ]);
         } catch (ValidationException $e) {
@@ -38,5 +39,45 @@ class AuthController extends Controller
                 'phone' => $user->phone,
             ]
         ], 201);
+    }
+
+    public function login(Request $request){
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if(!$user || !Hash::check($request->password, $user->password)){
+            return response()->json([
+                'message' => 'Invalid email or password.'
+            ], 401);
+        }
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'is_admin' => $user->is_admin
+            ],
+            'access' => [
+                'token' => $token,
+                'token_type' => 'Bearer',
+            ]
+        ]);
+    }
+
+    public function logout(Request $request){
+        $user = $request->user();
+        if ($user) {
+            $user->currentAccessToken()->delete();
+        }
+
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }
